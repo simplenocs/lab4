@@ -1,0 +1,64 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Notepad.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="550"
+		Width="400" Height="550"
+        x:Class="Notepad.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Notepad"
+		xmlns:conv="clr-namespace:Notepad.Views.Converters">
+
+	<Window.Resources>
+		<conv:FileItemToImageconverts x:Key="myConverter"/>
+	</Window.Resources>
+
+	<Window.Styles>
+		<Style Selector="Button">
+			<Setter Property="Background" Value="#147cf3"/>
+			<Setter Property="Foreground" Value="#000000"/>
+			<Setter Property="BorderBrush" Value="#8e4418"/>
+			<Setter Property="BorderThickness" Value="2"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		</Style>
+		<Style Selector="Button.b1">
+			<Setter Property="FontSize" Value="15"/>
+			<Setter Property="Width" Value="400"/>
+			<Setter Property="Height" Value="50"/>
+		</Style>
+		<Style Selector="Button.b2">
+			<Setter Property="FontSize" Value="15"/>
+			<Setter Property="Width" Value="250"/>
+			<Setter Property="Height" Value="58"/>
+		</Style>
+		<Style Selector="ListBoxItem">
+			<Setter Property="Padding" Value="6"/>
+		</Style>
+
+	</Window.Styles>
+
+	<Panel>
+		<Grid RowDefinitions="*,40,40" IsVisible="{Binding !ExplorerMode}">
+			<TextBox Name="contentTextBox" Text="{Binding ContentBox}" AcceptsReturn="True" TextWrapping="NoWrap"></TextBox>
+			<Button Name="openButton" Grid.Row="1" Classes="b1" Command="{Binding Opening}">Открыть</Button>
+			<Button Name="saveButton" Grid.Row="2" Classes="b1" Command="{Binding Saving}">Сохранить</Button>
+		</Grid>
+		<Grid RowDefinitions="10*,*,*" ColumnDefinitions="*,*" IsVisible="{Binding ExplorerMode}">
+			<ListBox Items="{Binding FileList}" SelectedItem="{Binding SelectedItem}" DoubleTapped="DBLtoupe" Name="fileListBox" Grid.ColumnSpan="2">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<Grid ColumnDefinitions="*,9*">
+							<Image Width="40" Height="40" Source="{Binding Type, Converter={StaticResource myConverter}}" Margin="5 0 5 0"/>
+							<TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+						</Grid>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+			<TextBox Name="fileTextBox" Text="{Binding FileBox}" Grid.Row="1" Grid.ColumnSpan="2" TextWrapping="NoWrap"></TextBox>
+			<Button Name="okButton" Grid.Column="0" Grid.Row="2" Classes="b2" Command="{Binding Ok}" Content="{Binding ButtonMode}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+			<Button Name="cancelButton" Grid.Column="1" Grid.Row="2" Classes="b2" Command="{Binding Cancel}" VerticalAlignment="Center" HorizontalAlignment="Center">Отмена</Button>
+		</Grid>
+	</Panel>
+</Window>
